@@ -1,6 +1,7 @@
 from config import db
+from sqlalchemy_serializer import SerializerMixin
 
-class Course(db.Model):
+class Course(db.Model,SerializerMixin):
 
     __tablename__="courses"
 
@@ -10,7 +11,9 @@ class Course(db.Model):
 
     instructor=db.relationship("Instructor",back_populates="courses")
 
-class User(db.Model):
+    serialize_rules=("-instructor.courses",)
+
+class User(db.Model,SerializerMixin):
 
     __tablename__="users"
     __table_args__=(db.CheckConstraint("age>=18 and age<=65",name="age_check_constraint"),)
@@ -22,7 +25,7 @@ class User(db.Model):
     profile_pic=db.Column(db.String)
 
 
-class Instructor(User):
+class Instructor(User,SerializerMixin):
 
     __tablename__="instructors"
 
@@ -30,3 +33,5 @@ class Instructor(User):
     tenured=db.Column(db.Boolean, default=False)
 
     courses=db.relationship("Course",back_populates="instructor")
+
+    serialize_rules=("-courses.instructor",)
