@@ -13,7 +13,7 @@ class Course(db.Model):
 class User(db.Model):
 
     __tablename__="users"
-    __table_args__=(db.CheckConstraint("age","age>=18 and age<=65",name="age_check_constraint"))
+    __table_args__=(db.CheckConstraint("age>=18 and age<=65",name="age_check_constraint"),)
 
     id=db.Column(db.Integer,primary_key=True)
     fname=db.Column(db.String,nullable=False)
